@@ -32,6 +32,11 @@ func loggingSettings(filename string) {
 	log.SetOutput(multiLogFile)
 }
 
+// m秒待機する関数
+func sleep(m int) {
+	time.Sleep(time.Duration(m) * time.Second)
+}
+
 func main() {
 	branch := [7]string{"MBR", "MMX", "MCL", "MAR", "MLA", "MPE", "MCO"}
 
@@ -198,4 +203,5 @@ func main() {
 
 	}
 	log.Println("----- ALL Completed! -----")
+	sleep(3)
 }
