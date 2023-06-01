@@ -72,6 +72,7 @@ func main() {
 			log.Println(err)
 		}
 
+
 		// 転記先ファイルを開く
 		sumFile, err := excelize.OpenFile("Summary.xlsx")
 		if err != nil {
@@ -93,93 +94,90 @@ func main() {
 
 		switch month {
 
-		case "Apr":
+		case "April":
 			sumFile.SetCellValue("変数", "D"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "D"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "D"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "D"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "D"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "D"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "D"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "D"+calculateRow(i, 36), qtyProspect2)
+			sumFile.SetCellValue("変数", "D"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "D"+calculateRowProspect(i, 36), qtyProspect2)
 		case "May":
 			sumFile.SetCellValue("変数", "E"+calculateRow(i, 0), salesResult)
-			fmt.Println("E"+calculateRow(i, 0), salesResult)
 			sumFile.SetCellValue("変数", "E"+calculateRowProspect(i, 9), salesProspect)
-			fmt.Println("E"+calculateRowProspect(i, 9), salesProspect)
 			sumFile.SetCellValue("変数", "E"+calculateRowProspect(i, 10), qtyProspect)
-			fmt.Println("E"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "E"+calculateRow(i, 26), salesResult2)
 			sumFile.SetCellValue("変数", "E"+calculateRowProspect(i, 35), salesProspect2)
 			sumFile.SetCellValue("変数", "E"+calculateRowProspect(i, 36), qtyProspect2)
-		case "Jun":
+		case "June":
 			sumFile.SetCellValue("変数", "F"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "F"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "F"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "F"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "F"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "F"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "F"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "F"+calculateRow(i, 36), qtyProspect2)
-		case "Jul":
+			sumFile.SetCellValue("変数", "F"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "F"+calculateRowProspect(i, 36), qtyProspect2)
+		case "July":
 			sumFile.SetCellValue("変数", "G"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "G"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "G"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "G"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "G"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "G"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "G"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "G"+calculateRow(i, 36), qtyProspect2)
-		case "Aug":
+			sumFile.SetCellValue("変数", "G"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "G"+calculateRowProspect(i, 36), qtyProspect2)
+		case "August":
 			sumFile.SetCellValue("変数", "H"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "H"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "H"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "H"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "H"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "H"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "H"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "H"+calculateRow(i, 36), qtyProspect2)
-		case "Sep":
+			sumFile.SetCellValue("変数", "H"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "H"+calculateRowProspect(i, 36), qtyProspect2)
+		case "September":
 			sumFile.SetCellValue("変数", "I"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "I"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "I"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "I"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "I"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "I"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "I"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "I"+calculateRow(i, 36), qtyProspect2)
-		case "Oct":
+			sumFile.SetCellValue("変数", "I"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "I"+calculateRowProspect(i, 36), qtyProspect2)
+		case "October":
 			sumFile.SetCellValue("変数", "J"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "J"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "J"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "J"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "J"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "J"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "J"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "J"+calculateRow(i, 36), qtyProspect2)
-		case "Nov":
+			sumFile.SetCellValue("変数", "J"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "J"+calculateRowProspect(i, 36), qtyProspect2)
+		case "November":
 			sumFile.SetCellValue("変数", "K"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "K"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "K"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "K"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "K"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "K"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "K"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "K"+calculateRow(i, 36), qtyProspect2)
-		case "Dec":
+			sumFile.SetCellValue("変数", "K"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "K"+calculateRowProspect(i, 36), qtyProspect2)
+		case "December":
 			sumFile.SetCellValue("変数", "L"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "L"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "L"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "L"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "L"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "L"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "L"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "L"+calculateRow(i, 36), qtyProspect2)
-		case "Jan":
+			sumFile.SetCellValue("変数", "L"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "L"+calculateRowProspect(i, 36), qtyProspect2)
+		case "January":
 			sumFile.SetCellValue("変数", "M"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "M"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "M"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "M"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "M"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "M"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "M"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "M"+calculateRow(i, 36), qtyProspect2)
-		case "Feb":
+			sumFile.SetCellValue("変数", "M"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "M"+calculateRowProspect(i, 36), qtyProspect2)
+		case "February":
 			sumFile.SetCellValue("変数", "N"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "N"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "N"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "N"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "N"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "N"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "N"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "N"+calculateRow(i, 36), qtyProspect2)
-		case "Mar":
+			sumFile.SetCellValue("変数", "N"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "N"+calculateRowProspect(i, 36), qtyProspect2)
+		case "March":
 			sumFile.SetCellValue("変数", "O"+calculateRow(i, 0), salesResult)
-			sumFile.SetCellValue("変数", "O"+calculateRow(i, 9), salesProspect)
-			sumFile.SetCellValue("変数", "O"+calculateRow(i, 10), qtyProspect)
+			sumFile.SetCellValue("変数", "O"+calculateRowProspect(i, 9), salesProspect)
+			sumFile.SetCellValue("変数", "O"+calculateRowProspect(i, 10), qtyProspect)
 			sumFile.SetCellValue("変数", "O"+calculateRow(i, 26), salesResult2)
-			sumFile.SetCellValue("変数", "O"+calculateRow(i, 35), salesProspect2)
-			sumFile.SetCellValue("変数", "O"+calculateRow(i, 36), qtyProspect2)
+			sumFile.SetCellValue("変数", "O"+calculateRowProspect(i, 35), salesProspect2)
+			sumFile.SetCellValue("変数", "O"+calculateRowProspect(i, 36), qtyProspect2)
 		}
 
 		if err := sumFile.Save(); err != nil {
