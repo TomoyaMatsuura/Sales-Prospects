@@ -36,7 +36,7 @@ func main() {
 	branch := [7]string{"MBR", "MMX", "MCL", "MAR", "MLA", "MPE", "MCO"}
 
 	loggingSettings("ログ.log")
-	log.Println("    -----   Start...   -----")
+	log.Println("-----    Start...    -----")
 
 	for i := 0; i < len(branch); i++ {
 		//保存されたファイルを開く
@@ -193,7 +193,9 @@ func main() {
 		if err := sumFile.Save(); err != nil {
 			log.Println(err)
 		}
-		log.Println(branch[i], "----- Completed!!! -----")
+		log.Println("----- "+ branch[i] + " Registered -----")
+		
 
 	}
+	log.Println("----- ALL Completed! -----")
 }
