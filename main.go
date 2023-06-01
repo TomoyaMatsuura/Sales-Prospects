@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"io"
 	"log"
+	"os"
 	"strconv"
 	"time"
 
@@ -23,17 +24,26 @@ func calculateRowProspect(i int, add int) string {
 	return res
 }
 
+// ログ出力を行う関数
+func loggingSettings(filename string) {
+	logFile, _ := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	multiLogFile := io.MultiWriter(os.Stdout, logFile)
+	log.SetFlags(log.Ldate | log.Ltime)
+	log.SetOutput(multiLogFile)
+}
+
 func main() {
 	branch := [7]string{"MBR", "MMX", "MCL", "MAR", "MLA", "MPE", "MCO"}
+
+	loggingSettings("ログ.log")
+	log.Println("    -----   Start...   -----")
 
 	for i := 0; i < len(branch); i++ {
 		//保存されたファイルを開く
 		filename := branch[i] + ".xlsx"
-		fmt.Println(branch[i] + ".xlsx")
 		branchFile, err := excelize.OpenFile(filename)
 		if err != nil {
 			log.Panicln(err)
-			fmt.Println(err)
 		}
 		defer func() {
 			if err := branchFile.Close(); err != nil {
@@ -181,9 +191,9 @@ func main() {
 		}
 
 		if err := sumFile.Save(); err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
-		fmt.Println("Completed!")
+		log.Println(branch[i], "----- Completed!!! -----")
 
 	}
 }
