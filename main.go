@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/xuri/excelize/v2"
@@ -43,10 +44,32 @@ func main() {
 	loggingSettings("ログ.log")
 	log.Println("-----    Start...    -----")
 
-	for i := 0; i < len(branch); i++ {
+	//カレントディレクトリのファイル一覧を取得
+	files, _ := os.ReadDir("./")
+
+	//ファイル名とマッチするかどうか判定
+	matched := false
+
+	//ディレクトリ内のファイルが販社名が含まれるか確認
+	for i := 0; i < len(files); i++ {
+		fileName := files[i].Name()
+
+		for _, s := range branch {
+			//for i := 0; i < len(branch); i ++
+			if strings.Contains(fileName, s) {
+				matched = true
+			} else {
+				continue
+			}
+		}
+
+		// if文でfalseだったらcontinue(上に戻る)
+		if !matched {
+			continue
+		}
+
 		//保存されたファイルを開く
-		filename := branch[i] + ".xlsx"
-		branchFile, err := excelize.OpenFile(filename)
+		branchFile, err := excelize.OpenFile(fileName)
 		if err != nil {
 			log.Panicln(err)
 		}
@@ -86,7 +109,6 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-
 
 		// 転記先ファイルを開く
 		sumFile, err := excelize.OpenFile("Summary.xlsx")
@@ -198,8 +220,7 @@ func main() {
 		if err := sumFile.Save(); err != nil {
 			log.Println(err)
 		}
-		log.Println("----- "+ branch[i] + " Registered -----")
-		
+		log.Println("----- " + branch[i] + " Registered -----")
 
 	}
 	log.Println("----- ALL Completed! -----")
