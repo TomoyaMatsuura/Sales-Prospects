@@ -11,25 +11,25 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-// 売上実績セル関数
+// 売上実績セルを指定
 func calculateResult(i int, add int) string {
 	res := strconv.Itoa(i + add)
 	return res
 }
 
-// 売上予想と売上速報セル関数
+// 売上予想と売上速報のセルを指定
 func calculateProspect(i int, add int, addNumber int) string {
 	res := strconv.Itoa(i + add + addNumber)
 	return res
 }
 
-// コメントセル関数
+// コメントのセルを指定
 func calculateComment(i int) string {
 	res := strconv.Itoa(i)
 	return "A" + res
 }
 
-// ログ出力を行う関数
+// ログ出力を行う
 func loggingSettings(filename string) {
 	logFile, _ := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	multiLogFile := io.MultiWriter(os.Stdout, logFile)
@@ -37,12 +37,12 @@ func loggingSettings(filename string) {
 	log.SetOutput(multiLogFile)
 }
 
-// m秒待機する関数
+// m秒待機する
 func sleep(m int) {
 	time.Sleep(time.Duration(m) * time.Second)
 }
 
-// 売上予想セル取得
+// 売上予想セル値の取得
 func getCellProspect(branchFile *excelize.File, comment [10]string, sheet string) (string, string, string, [10]string) {
 	salesResult, err := branchFile.GetCellValue(sheet, "B5")
 	if err != nil {
@@ -67,7 +67,7 @@ func getCellProspect(branchFile *excelize.File, comment [10]string, sheet string
 	return salesResult, salesProspect, qtyProspect, commentProspect
 }
 
-// 売上速報セル取得
+// 売上速報のセル値取得
 func getCellReport(branchFile *excelize.File, comment [10]string, sheet string) (string, string, [10]string) {
 	salesReport, err := branchFile.GetCellValue(sheet, "B6")
 	if err != nil {
@@ -88,7 +88,7 @@ func getCellReport(branchFile *excelize.File, comment [10]string, sheet string) 
 	return salesReport, qtyReport, commentReport
 }
 
-// 売上予想出力関数
+// 売上予想の値を出力
 func setProspect(sumFile *excelize.File, column string, rowNumber int, salesResult string, salesProspect string, qtyProspect string, addNumber int) {
 	if salesResult != "" {
 		sumFile.SetCellValue("変数", column+calculateResult(rowNumber, 0), salesResult)
@@ -102,6 +102,7 @@ func setProspect(sumFile *excelize.File, column string, rowNumber int, salesResu
 	}
 }
 
+// 売上予想２回目の値を出力
 func setProspect2(sumFile *excelize.File, column string, rowNumber int, salesResult2 string, salesProspect2 string, qtyProspect2 string, addNumber int) {
 	if salesResult2 != "" {
 		sumFile.SetCellValue("変数", column+calculateResult(rowNumber, 26), salesResult2)
@@ -117,6 +118,7 @@ func setProspect2(sumFile *excelize.File, column string, rowNumber int, salesRes
 
 }
 
+// 売上速報の値を出力
 func setReport(sumFile *excelize.File, column string, rowNumber int, salesReport string, qtyReport string, addNumber int) {
 	if salesReport != "" {
 		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 52, addNumber), salesReport)
@@ -128,7 +130,7 @@ func setReport(sumFile *excelize.File, column string, rowNumber int, salesReport
 
 }
 
-// コメント出力関数
+// コメントを出力
 func setComment(sumFile *excelize.File, commentNumber int, commentValue [10]string, sheetName string) {
 	for m := 0; m < 10; m++ {
 		if commentValue[m] != "" {
@@ -226,6 +228,7 @@ func main() {
 			}
 		}()
 
+		// 実行時点の月を英語で取得 ex. January
 		month := time.Now().Month().String()
 
 		// MCL1の場合/1000が必要
@@ -234,6 +237,7 @@ func main() {
 		// 	clp = 1000
 		// }
 
+		// monthの値で実行内容を振り分ける
 		switch month {
 
 		case "April":
@@ -324,6 +328,7 @@ func main() {
 			setComment(sumFile, commentNumber, commentReport, "February Report")
 		}
 
+		// ファイルを閉じる
 		if err := sumFile.Save(); err != nil {
 			log.Println(err)
 		}
