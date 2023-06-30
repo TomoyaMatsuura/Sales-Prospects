@@ -57,12 +57,12 @@ func getCellProspect(branchFile *excelize.File, comment [10]string, sheet string
 		log.Println(err)
 	}
 	commentProspect := [10]string{}
-	for j := 0; j < 10; j++ {
-		comment1, err := branchFile.GetCellValue(sheet, comment[j])
+	for i := 0; i < 10; i++ {
+		comment1, err := branchFile.GetCellValue(sheet, comment[i])
 		if err != nil {
 			log.Println(err)
 		}
-		commentProspect[j] = comment1
+		commentProspect[i] = comment1
 	}
 	return salesResult, salesProspect, qtyProspect, commentProspect
 }
@@ -78,12 +78,12 @@ func getCellReport(branchFile *excelize.File, comment [10]string, sheet string) 
 		log.Println(err)
 	}
 	commentReport := [10]string{}
-	for j := 0; j < 10; j++ {
-		comment1, err := branchFile.GetCellValue(sheet, comment[j])
+	for i := 0; i < 10; i++ {
+		comment1, err := branchFile.GetCellValue(sheet, comment[i])
 		if err != nil {
 			log.Println(err)
 		}
-		commentReport[j] = comment1
+		commentReport[i] = comment1
 	}
 	return salesReport, qtyReport, commentReport
 }
@@ -149,9 +149,9 @@ func setReport(sumFile *excelize.File, column string, rowNumber int, salesReport
 
 // コメントを出力
 func setComment(sumFile *excelize.File, commentNumber int, commentValue [10]string, sheetName string) {
-	for m := 0; m < 10; m++ {
-		if commentValue[m] != "" {
-			sumFile.SetCellValue(sheetName, calculateComment(commentNumber+m), commentValue[m])
+	for i := 0; i < 10; i++ {
+		if commentValue[i] != "" {
+			sumFile.SetCellValue(sheetName, calculateComment(commentNumber+i), commentValue[i])
 		}
 	}
 }
@@ -159,7 +159,7 @@ func setComment(sumFile *excelize.File, commentNumber int, commentValue [10]stri
 func main() {
 	branch := [7]string{"MBR", "MMX", "MCL", "MAR", "MLA", "MPE", "MCO"}
 
-	// 予想/速報のコメントはA18->A27なので、関数で取得する用の配列
+	// 予想or速報のコメントはA18->A27なので、関数で取得する用の配列
 	comment := [10]string{"A18", "A19", "A20", "A21", "A22", "A23", "A24", "A25", "A26", "A27"}
 
 	loggingSettings("ログ.log")
@@ -172,13 +172,16 @@ func main() {
 	for i := 0; i < len(files); i++ {
 		fileName := files[i].Name()
 
-		//ファイル名とマッチするかどうか判定
+		// セルの行を指定するための変数
 		rowNumber := 0
+		// MBRを0として1行ずつ下に降りるための変数
 		addNumber := 0
+		// コメントを記入する最初の行
 		commentNumber := 0
-		// MCLの場合金額を/1000する必要があるので、MCLのみdivNumber=1000にして値を割る
+		// MCLの場合金額を/1000する必要があるので、MCLのみdivNumber=1000にして値を割るための変数
 		divNumber := 0
 
+		//ファイル名に販社が含まれているか判定
 		for _, s := range branch {
 			if strings.Contains(fileName, s) {
 				switch s {
@@ -225,6 +228,7 @@ func main() {
 				}
 			}
 		}
+		// 販社名が含まれていなかったらレンジを抜ける
 		if rowNumber == 0 || commentNumber == 0 || divNumber == 0 {
 			continue
 		}
@@ -257,7 +261,7 @@ func main() {
 			}
 		}()
 
-		// 実行時点の月を英語で取得 ex. January
+		// 実行時点の月を英語で取得 ex.January
 		month := time.Now().Month().String()
 
 		// monthの値で実行内容を振り分ける
