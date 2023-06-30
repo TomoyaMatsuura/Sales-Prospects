@@ -88,44 +88,61 @@ func getCellReport(branchFile *excelize.File, comment [10]string, sheet string) 
 	return salesReport, qtyReport, commentReport
 }
 
+// stringからintに変換
+func toInt(str string) int {
+	stringInt, err := strconv.Atoi(str)
+	if err != nil {
+		log.Panicln(err)
+	}
+	return stringInt
+}
+
 // 売上予想の値を出力
-func setProspect(sumFile *excelize.File, column string, rowNumber int, salesResult string, salesProspect string, qtyProspect string, addNumber int) {
+func setProspect(sumFile *excelize.File, column string, rowNumber int, salesResult string, salesProspect string, qtyProspect string, addNumber int, divNumber int) {
 	if salesResult != "" {
-		sumFile.SetCellValue("変数", column+calculateResult(rowNumber, 0), salesResult)
+		salesResultInt := (toInt(salesResult) / divNumber)
+		sumFile.SetCellValue("変数", column+calculateResult(rowNumber, 0), salesResultInt)
 	}
 	if salesProspect != "" {
-		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 9, addNumber), salesProspect)
+		salesProspectInt := (toInt(salesProspect) / divNumber)
+		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 9, addNumber), salesProspectInt)
 	}
 
 	if qtyProspect != "" {
-		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 10, addNumber), qtyProspect)
+		qtyProspectInt := toInt(qtyProspect)
+		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 10, addNumber), qtyProspectInt)
 	}
 }
 
 // 売上予想２回目の値を出力
-func setProspect2(sumFile *excelize.File, column string, rowNumber int, salesResult2 string, salesProspect2 string, qtyProspect2 string, addNumber int) {
+func setProspect2(sumFile *excelize.File, column string, rowNumber int, salesResult2 string, salesProspect2 string, qtyProspect2 string, addNumber int, divNumber int) {
 	if salesResult2 != "" {
-		sumFile.SetCellValue("変数", column+calculateResult(rowNumber, 26), salesResult2)
+		salesResult2Int := (toInt(salesResult2) / divNumber)
+		sumFile.SetCellValue("変数", column+calculateResult(rowNumber, 26), salesResult2Int)
 	}
 
 	if salesProspect2 != "" {
-		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 35, addNumber), salesProspect2)
+		salesProspect2Int := (toInt(salesProspect2) / divNumber)
+		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 35, addNumber), salesProspect2Int)
 	}
 
 	if qtyProspect2 != "" {
-		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 36, addNumber), qtyProspect2)
+		qtyProspect2Int := toInt(qtyProspect2)
+		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 36, addNumber), qtyProspect2Int)
 	}
 
 }
 
 // 売上速報の値を出力
-func setReport(sumFile *excelize.File, column string, rowNumber int, salesReport string, qtyReport string, addNumber int) {
+func setReport(sumFile *excelize.File, column string, rowNumber int, salesReport string, qtyReport string, addNumber int, divNumber int) {
 	if salesReport != "" {
-		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 52, addNumber), salesReport)
+		salesReportInt := (toInt(salesReport) / divNumber)
+		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 52, addNumber), salesReportInt)
 	}
 
 	if qtyReport != "" {
-		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 53, addNumber), qtyReport)
+		qtyReportInt := toInt(qtyReport)
+		sumFile.SetCellValue("変数", column+calculateProspect(rowNumber, 53, addNumber), qtyReportInt)
 	}
 
 }
@@ -159,6 +176,7 @@ func main() {
 		rowNumber := 0
 		addNumber := 0
 		commentNumber := 0
+		divNumber := 0
 
 		for _, s := range branch {
 			if strings.Contains(fileName, s) {
@@ -167,36 +185,46 @@ func main() {
 					rowNumber = 4
 					addNumber = 0
 					commentNumber = 23
+					divNumber = 1
 				case "MMX":
 					rowNumber = 5
 					addNumber = 1
 					commentNumber = 35
+					divNumber = 1
 				case "MCL":
 					rowNumber = 6
 					addNumber = 2
 					commentNumber = 47
+					divNumber = 1000
 				case "MAR":
 					rowNumber = 7
 					addNumber = 3
 					commentNumber = 59
+					divNumber = 1
 				case "MLA":
 					rowNumber = 8
 					addNumber = 4
 					commentNumber = 71
+					divNumber = 1
 				case "MPE":
 					rowNumber = 9
 					addNumber = 5
 					commentNumber = 83
+					divNumber = 1
 				case "MCO":
 					rowNumber = 10
 					addNumber = 6
 					commentNumber = 95
+					divNumber = 1
 				default:
 					rowNumber = 0
+					addNumber = 0
+					commentNumber = 0
+					divNumber = 0
 				}
 			}
 		}
-		if rowNumber == 0 {
+		if rowNumber == 0 || commentNumber == 0 || divNumber == 0 {
 			continue
 		}
 
@@ -218,7 +246,7 @@ func main() {
 		// 売上速報取得
 		salesReport, qtyReport, commentReport := getCellReport(branchFile, comment, "速報値")
 		// 転記先ファイルを開く
-		sumFile, err := excelize.OpenFile("Summary.xlsx")
+		sumFile, err := excelize.OpenFile("中南米営業部売上.xlsx")
 		if err != nil {
 			log.Println(err)
 		}
@@ -241,88 +269,88 @@ func main() {
 		switch month {
 
 		case "April":
-			setProspect(sumFile, "D", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "D", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "O", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "D", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "D", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "O", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "March Report")
 
 		case "May":
-			setProspect(sumFile, "E", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "E", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "D", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "E", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "E", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "D", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "April Report")
 		case "June":
-			setProspect(sumFile, "F", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "F", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "E", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "F", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "F", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "E", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "May Report")
 
 		case "July":
-			setProspect(sumFile, "G", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "G", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "F", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "G", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "G", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "F", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "June Report")
 		case "August":
-			setProspect(sumFile, "H", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "H", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "G", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "H", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "H", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "G", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "July Report")
 		case "September":
-			setProspect(sumFile, "I", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "I", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "H", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "I", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "I", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "H", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "August Report")
 		case "October":
-			setProspect(sumFile, "J", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "J", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "I", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "J", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "J", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "I", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "September Report")
 		case "November":
-			setProspect(sumFile, "K", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "K", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "J", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "K", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "K", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "J", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "October Report")
 		case "December":
-			setProspect(sumFile, "L", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "L", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "K", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "L", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "L", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "K", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "November Report")
 		case "January":
-			setProspect(sumFile, "M", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "M", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "L", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "M", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "M", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "L", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "December Report")
 		case "February":
-			setProspect(sumFile, "N", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "N", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "M", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "N", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "N", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "M", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "January Report")
 		case "March":
-			setProspect(sumFile, "O", rowNumber, salesResult, salesProspect, qtyProspect, addNumber)
-			setProspect2(sumFile, "O", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber)
-			setReport(sumFile, "N", rowNumber, salesReport, qtyReport, addNumber)
+			setProspect(sumFile, "O", rowNumber, salesResult, salesProspect, qtyProspect, addNumber, divNumber)
+			setProspect2(sumFile, "O", rowNumber, salesResult2, salesProspect2, qtyProspect2, addNumber, divNumber)
+			setReport(sumFile, "N", rowNumber, salesReport, qtyReport, addNumber, divNumber)
 			setComment(sumFile, commentNumber, commentProspect, month+" 1st")
 			setComment(sumFile, commentNumber, commentProspect2, month+" 2nd")
 			setComment(sumFile, commentNumber, commentReport, "February Report")
