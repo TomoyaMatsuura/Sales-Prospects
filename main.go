@@ -176,6 +176,7 @@ func main() {
 		rowNumber := 0
 		addNumber := 0
 		commentNumber := 0
+		// MCLの場合金額を/1000する必要があるので、MCLのみdivNumber=1000にして値を割る
 		divNumber := 0
 
 		for _, s := range branch {
@@ -258,12 +259,6 @@ func main() {
 
 		// 実行時点の月を英語で取得 ex. January
 		month := time.Now().Month().String()
-
-		// MCL1の場合/1000が必要
-		// var clp int = 1
-		// if i != 2 {
-		// 	clp = 1000
-		// }
 
 		// monthの値で実行内容を振り分ける
 		switch month {
